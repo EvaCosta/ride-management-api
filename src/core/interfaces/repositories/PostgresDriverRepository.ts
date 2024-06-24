@@ -9,9 +9,10 @@ export class PostgresDriverRepository implements IDriverRepository {
   async create(driver: Driver): Promise<Driver> {
     const client = await pool.connect();
     try {
-      const { nome, cpf, idade, sexo, endereco } = driver;
-      const query = 'INSERT INTO drivers (nome, cpf, idade, sexo, endereco) VALUES ($1, $2, $3, $4, $5) RETURNING *';
-      const values = [nome, cpf, idade, sexo, endereco];
+      const { nome, cpf, datanascimento, sexo, endereco } = driver;
+      
+      const query = 'INSERT INTO drivers (nome, cpf, datanascimento, sexo, endereco) VALUES ($1, $2, $3, $4, $5) RETURNING *';
+      const values = [nome, cpf, datanascimento, sexo, endereco];
       const result = await client.query(query, values);
       return result.rows[0];
     } finally {
@@ -55,9 +56,11 @@ export class PostgresDriverRepository implements IDriverRepository {
   async update(id: number, driver: Driver): Promise<Driver | null> {
     const client = await pool.connect();
     try {
-      const { nome, cpf, idade, sexo, endereco } = driver;
-      const query = 'UPDATE drivers SET nome = $1, cpf = $2, idade = $3, sexo = $4, endereco = $5 WHERE id = $6 RETURNING *';
-      const values = [nome, cpf, idade, sexo, endereco, id];
+
+      const { nome, cpf, datanascimento, sexo, endereco } = driver;
+
+      const query = 'UPDATE drivers SET nome = $1, cpf = $2, datanascimento = $3, sexo = $4, endereco = $5 WHERE id = $6 RETURNING *';
+      const values = [nome, cpf, datanascimento, sexo, endereco, id];
       const result = await client.query(query, values);
       return result.rows[0] || null;
     } finally {

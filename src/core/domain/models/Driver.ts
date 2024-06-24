@@ -1,9 +1,8 @@
 export interface Driver {
-    id: number;
-    nome: string;
-    cpf: string;
-    idade: number;
-    sexo: 'M' | 'F' | 'Outro';
-    endereco: string;
+  id: number;
+  nome: string;
+  cpf: string;
+  datanascimento: string;
+  sexo: 'M' | 'F' | 'Outro';
+  endereco: string;
 }
-  

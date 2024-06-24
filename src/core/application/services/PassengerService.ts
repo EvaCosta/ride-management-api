@@ -1,16 +1,28 @@
 import { Passenger } from "../../domain/models/Passenger";
 import { IPassengerRepository } from '../../domain/repositories/IPassengerRepository';
+import { CPF } from "../../domain/value-objects/CPF";
+import { DateOfBirth } from "../../domain/value-objects/DateOfBirth";
 
 export class PassengerService {
   constructor(private readonly passengerRepository: IPassengerRepository) {}
 
-  async create(passenger: Passenger): Promise<Passenger> {
-    const existingPassenger = await this.passengerRepository.findByCpf(passenger.cpf);
-    if (existingPassenger) {
+  private async validateCPF(cpf: string, id?: number): Promise<void> {
+    const cpfObject = new CPF(cpf);
+    const existingDriver = await this.passengerRepository.findByCpf(cpfObject.getValue());
+    
+    if (existingDriver  && existingDriver.id !== id) {
       throw new Error('Já existe um passageiro com este CPF.');
     }
-
-    return await this.passengerRepository.create(passenger);
+  }
+  async create(passenger: Passenger): Promise<Passenger> {
+    try {
+      new DateOfBirth(passenger.datanascimento);
+      await this.validateCPF(passenger.cpf);
+     
+      return await this.passengerRepository.create(passenger);
+    } catch (error) {
+        throw error;
+    }
   }
 
   async findById(id: number): Promise<Passenger | null> {
@@ -18,7 +30,13 @@ export class PassengerService {
   }
 
   async update(id: number, passenger: Passenger): Promise<Passenger | null> {
-    return await this.passengerRepository.update(id, passenger);
+    try {
+      new DateOfBirth(passenger.datanascimento);
+      await this.validateCPF(passenger.cpf, id);
+      return await this.passengerRepository.update(id, passenger);
+    } catch (error) {
+        throw error;
+    }
   }
 
   async delete(id: number): Promise<boolean> {

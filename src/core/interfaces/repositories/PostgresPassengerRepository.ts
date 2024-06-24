@@ -9,9 +9,9 @@ export class PostgresPassengerRepository implements IPassengerRepository {
   async create(passenger: Passenger): Promise<Passenger> {
     const client = await pool.connect();
     try {
-      const { nome, cpf, idade, sexo, endereco } = passenger;
-      const query = 'INSERT INTO passengers (nome, cpf, idade, sexo, endereco) VALUES ($1, $2, $3, $4, $5) RETURNING *';
-      const values = [nome, cpf, idade, sexo, endereco];
+      const { nome, cpf, datanascimento, sexo, endereco } = passenger;
+      const query = 'INSERT INTO passengers (nome, cpf, datanascimento, sexo, endereco) VALUES ($1, $2, $3, $4, $5) RETURNING *';
+      const values = [nome, cpf, datanascimento, sexo, endereco];
       const result = await client.query(query, values);
       return result.rows[0];
     } finally {
@@ -55,9 +55,9 @@ export class PostgresPassengerRepository implements IPassengerRepository {
   async update(id: number, passenger: Passenger): Promise<Passenger | null> {
     const client = await pool.connect();
     try {
-      const { nome, cpf, idade, sexo, endereco } = passenger;
-      const query = 'UPDATE passengers SET nome = $1, cpf = $2, idade = $3, sexo = $4, endereco = $5 WHERE id = $6 RETURNING *';
-      const values = [nome, cpf, idade, sexo, endereco, id];
+      const { nome, cpf, datanascimento, sexo, endereco } = passenger;
+      const query = 'UPDATE passengers SET nome = $1, cpf = $2, datanascimento = $3, sexo = $4, endereco = $5 WHERE id = $6 RETURNING *';
+      const values = [nome, cpf, datanascimento, sexo, endereco, id];
       const result = await client.query(query, values);
       return result.rows[0] || null;
     } finally {

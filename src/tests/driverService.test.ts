@@ -53,8 +53,8 @@ describe('DriverService', () => {
     const newDriver: Driver = {
       id: 1,
       nome: 'João Silva',
-      cpf: '12345678900',
-      idade: 30,
+      cpf: '111.444.777-35',
+      datanascimento: '2000-12-05',
       sexo: 'M',
       endereco: 'Rua A, 123',
     };
@@ -70,8 +70,8 @@ describe('DriverService', () => {
     const newDriver: Driver = {
       id: 1,
       nome: 'João Silva',
-      cpf: '12345678900',
-      idade: 30,
+      cpf: '111.444.777-35',
+      datanascimento: '2000-12-05',
       sexo: 'M',
       endereco: 'Rua A, 123',
     };
@@ -85,8 +85,8 @@ describe('DriverService', () => {
     const newDriver: Driver = {
       id: 1,
       nome: 'João Silva',
-      cpf: '12345678900',
-      idade: 30,
+      cpf: '111.444.777-35',
+      datanascimento: '2000-12-05',
       sexo: 'M',
       endereco: 'Rua A, 123',
     };
