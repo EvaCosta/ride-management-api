@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
-import config from '../../../config';
-import { Driver } from '../../domain/models/Driver';
-import { IDriverRepository } from '../../domain/repositories/IDriverRepository';
+import config from '../../../../config';
+import { Driver } from '../../../domain/models/Driver';
+import { IDriverRepository } from '../../../domain/repositories/IDriverRepository';
 
 const pool = new Pool(config.db);
 

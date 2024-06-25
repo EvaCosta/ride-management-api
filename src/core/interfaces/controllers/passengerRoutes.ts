@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { PostgresPassengerRepository } from '../repositories/PostgresPassengerRepository';
+import { PostgresPassengerRepository } from '../../infrastructure/data/repositories/PostgresPassengerRepository';
 import { PassengerService } from '../../application/services/PassengerService';
-import { PassengerController } from '../controllers/passengerController';
+import { PassengerController } from '../../../controllers/PassengerController';
 
 const router = Router();
 

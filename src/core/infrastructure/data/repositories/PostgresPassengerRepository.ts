@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
-import config from '../../../config';
-import { Passenger } from '../../domain/models/Passenger';
-import { IPassengerRepository } from '../../domain/repositories/IPassengerRepository';
+import config from '../../../../config';
+import { Passenger } from '../../../domain/models/Passenger';
+import { IPassengerRepository } from '../../../domain/repositories/IPassengerRepository';
 
 const pool = new Pool(config.db);
 

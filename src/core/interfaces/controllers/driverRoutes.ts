@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { DriverController } from '../controllers/driverController';
-import { PostgresDriverRepository } from '../repositories/PostgresDriverRepository';
+import { DriverController } from '../../../controllers/DriverController';
+import { PostgresDriverRepository } from '../../infrastructure/data/repositories/PostgresDriverRepository';
 import { DriverService } from '../../application/services/DriverService';
 
 const router = Router();

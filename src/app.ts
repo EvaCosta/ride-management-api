@@ -1,8 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import fareRoutes from './core/interfaces/routes/fareRoutes';
-import driverRoutes from './core/interfaces/routes/driverRoutes';
-import passengerRoutes from './core/interfaces/routes/passengerRoutes';
+import fareRoutes from './core/interfaces/controllers/fareRoutes';
+import driverRoutes from './core/interfaces/controllers/driverRoutes';
+import passengerRoutes from './core/interfaces/controllers/passengerRoutes';
+import raceRoutes from './core/interfaces/controllers/RaceRoutes';
 
 const app = express();
 const PORT = 3000;
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 app.use('/passenger', passengerRoutes)
 app.use('/driver', driverRoutes)
 app.use('/fare', fareRoutes);
+app.use('/race', raceRoutes)
 
 // Inicia o servidor
 app.listen(PORT, () => {

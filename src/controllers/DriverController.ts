@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { DriverService } from '../../application/services/DriverService';
-import { Driver } from '../../domain/models/Driver';
-import { ResponseUtil } from "../../../utils/ResponseUtil";
+import { DriverService } from '../core/application/services/DriverService';
+import { Driver } from '../core/domain/models/Driver';
+import { ResponseUtil } from "../utils/ResponseUtil";
 
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}

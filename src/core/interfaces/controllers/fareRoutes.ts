@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { FareController } from '../controllers/fareController';
+import { FareController } from '../../../controllers/FareController';
 
 const router = Router();
 const fareController = new FareController();

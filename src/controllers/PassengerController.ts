@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { PassengerService } from '../../application/services/PassengerService';
-import { Passenger } from '../../domain/models/Passenger';
-import { ResponseUtil } from "../../../utils/ResponseUtil";
+import { PassengerService } from '../core/application/services/PassengerService';
+import { Passenger } from '../core/domain/models/Passenger';
+import { ResponseUtil } from "../utils/ResponseUtil";
 
 export class PassengerController {
   constructor(private readonly passengerService: PassengerService) {}
