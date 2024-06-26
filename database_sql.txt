@@ -1,0 +1,58 @@
+CREATE TABLE drivers (
+  id SERIAL PRIMARY KEY,
+  nome VARCHAR(255) NOT NULL,
+  cpf VARCHAR(14) UNIQUE NOT NULL,
+  dataNascimento DATE NOT NULL,
+  sexo VARCHAR(10) CHECK (sexo IN ('M', 'F', 'Outro')),
+  endereco TEXT,
+  disponivel BOOLEAN, 
+  cnh VARCHAR(20) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_drivers_cpf ON drivers (cpf);
+
+CREATE TABLE passengers (
+  id SERIAL PRIMARY KEY,
+  nome VARCHAR(255) NOT NULL,
+  cpf VARCHAR(14) UNIQUE NOT NULL,
+  dataNascimento DATE NOT NULL,
+  sexo VARCHAR(10) CHECK (sexo IN ('M', 'F', 'Outro')),
+  endereco TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX idx_passengers_cpf ON passengers (cpf);
+
+CREATE TABLE rides (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL,  
+  driver_id INT NOT NULL,
+  current_lat NUMERIC(10, 6) NOT NULL,
+  current_lon NUMERIC(10, 6) NOT NULL,
+  dest_lat NUMERIC(10, 6) NOT NULL,
+  dest_lon NUMERIC(10, 6) NOT NULL,
+  fare NUMERIC(10, 2) NOT NULL,
+  distance NUMERIC(10, 2) NOT NULL,
+  status VARCHAR(20) DEFAULT 'pending',
+  date DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES passengers(id), 
+  FOREIGN KEY (driver_id) REFERENCES drivers(id)
+);
+
+
+CREATE TABLE receipts (
+  id SERIAL PRIMARY KEY,
+  ride_id INT NOT NULL,
+  user_id VARCHAR(255) NOT NULL,
+  date DATE NOT NULL,
+  value NUMERIC(10, 2) NOT NULL,
+  distance NUMERIC(10, 2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (ride_id) REFERENCES rides(id)
+);
+
