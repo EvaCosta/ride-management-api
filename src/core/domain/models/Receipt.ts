@@ -1,7 +1,10 @@
+import { DateTime } from "../value-objects/DateTime";
 
 export interface Receipt {
-    userId: string;
-    date: string;
-    value: number;
-    distance: number;
+  id: string;
+  rideId: string;
+  userId: string;
+  date: string;
+  value: number;
+  distance: number;
 }

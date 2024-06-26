@@ -5,4 +5,7 @@ export interface Driver {
   datanascimento: string;
   sexo: 'M' | 'F' | 'Outro';
   endereco: string;
+  cnh: string;
+  created_at?: string;
+  updated_at?: string;
 }

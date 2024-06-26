@@ -1,7 +1,7 @@
 export interface Fare {
-    start: string;
-    end: string; 
-    weekdayRate: number;
-    weekendRate: number; 
-  }
+  start: string;
+  end: string; 
+  weekdayRate: number;
+  weekendRate: number; 
+}
   

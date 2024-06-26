@@ -6,4 +6,4 @@ export interface AcceptRaceParams {
     currentLocation: GeoLocation;
     destination: GeoLocation;
     dateTime: DateTime;
-  }
+}

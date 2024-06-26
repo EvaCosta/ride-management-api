@@ -1,48 +1,71 @@
 import { FareService } from './FareService';
 import { calculateFare } from '../../../utils/calculateFare';
-import { v4 as uuidv4 } from 'uuid';
-import fs from 'fs';
-import path from 'path';
 import { calculateDistance } from '../../../utils/calculateDistance';
 import { AcceptRaceParams } from '../../domain/models/AcceptRaceParams';
 import { Receipt } from '../../domain/models/Receipt';
+import { PostgresReceiptRepository } from '../../infrastructure/data/repositories/PostgresReceiptRepository';
+import { ReceiptService } from './ReceiptService';
+import { PostgresRideRepository } from '../../infrastructure/data/repositories/PostgresRideRepository';
+import { PostgresDriverRepository } from '../../infrastructure/data/repositories/PostgresDriverRepository';
+import { v4 as uuidv4 } from 'uuid';
+import { Ride } from '../../domain/models/Ride';
 
 export class RaceService {
   private fareService: FareService;
-  private tmpDirectory: string;
+  private receiptService: ReceiptService;
+  private receiptRepository: PostgresReceiptRepository;
+  private rideRepository: PostgresRideRepository;
+  private driverRepository: PostgresDriverRepository;
 
   constructor() {
     this.fareService = new FareService();
-    this.tmpDirectory = path.join(__dirname, '../../../../tmp');
+    this.receiptService = new ReceiptService();
+    this.receiptRepository = new PostgresReceiptRepository();
+    this.rideRepository = new PostgresRideRepository();
+    this.driverRepository = new PostgresDriverRepository();
   }
 
-  public acceptRace(params: AcceptRaceParams): Receipt {
+  public async acceptRace(params: AcceptRaceParams): Promise<Receipt> {
     const { userId, currentLocation, destination, dateTime } = params;
 
     const fareRate = this.fareService.getFareRate(dateTime);
     const result = calculateFare(currentLocation, destination, fareRate);
+    const driverId = await this.driverRepository.findAvailableDriver(currentLocation, dateTime);
 
-    const receipt: Receipt = {
+    if (!driverId) {
+      throw new Error('Nenhum motorista disponível no momento.');
+    }
+
+    const rideId = uuidv4();
+
+    const ride: Ride = {
+      id: rideId,
       userId,
-      date: dateTime.getValue().toISOString(),
-      value: result.price,
-      distance: calculateDistance(currentLocation.getLatitude(), currentLocation.getLongitude(), destination.getLatitude(), destination.getLongitude())
+      driverId,
+      currentLocation,
+      destination,
+      fare: result.price,
+      distance: calculateDistance(currentLocation.getLatitude(), currentLocation.getLongitude(), destination.getLatitude(), destination.getLongitude()),
+      dateTime,
+      status: 'accepted'
     };
 
-    // Async operation to save receipt
-    this.saveReceipt(receipt);
+    const createdRide = await this.rideRepository.create(ride);
+
+    const receiptId = uuidv4();
+
+    const receipt: Receipt = {
+      id: receiptId,
+      rideId: createdRide.id,
+      userId: ride.userId,
+      date: ride.dateTime.toString(),
+      value: ride.fare,
+      distance: ride.distance
+    };
+    await this.receiptRepository.create(receipt);
+
+    await this.receiptService.generateAndSaveReceipt(receipt);
 
     return receipt;
-  }
-
-  private async saveReceipt(receipt: Receipt): Promise<void> {
-    const receiptDate = receipt.date.split('T')[0];
-    const receiptPath = path.join(this.tmpDirectory, receipt.userId, receiptDate);
-    console.log(receipt.userId)
-    fs.mkdirSync(receiptPath, { recursive: true });
-    fs.writeFileSync(
-      path.join(receiptPath, `receipt-${uuidv4()}.txt`),
-      JSON.stringify(receipt, null, 2)
-    );
   }
 }

@@ -1,6 +1,7 @@
 import { Driver } from "../../domain/models/Driver";
 import { IDriverRepository } from '../../domain/repositories/IDriverRepository';
 import {CPF} from '../../domain/value-objects/CPF';
+import {CNH} from '../../domain/value-objects/CNH';
 import { DateOfBirth } from "../../domain/value-objects/DateOfBirth";
 
 export class DriverService {
@@ -17,6 +18,7 @@ export class DriverService {
 
   async create(driver: Driver): Promise<Driver> {
     try {
+      new CNH(driver.cnh);
       new DateOfBirth(driver.datanascimento);
       await this.validateCPF(driver.cpf);
 
@@ -28,6 +30,7 @@ export class DriverService {
 
   async update(id: number, driver: Driver): Promise<Driver | null> {
     try {
+      new CNH(driver.cnh);
       new DateOfBirth(driver.datanascimento);
       await this.validateCPF(driver.cpf, id);
       return await this.driverRepository.update(id, driver);
@@ -49,5 +52,8 @@ export class DriverService {
     return await this.driverRepository.findById(id);
   }
 
+  public async findByCpf(cpf: string): Promise<Driver | null> {
+    return this.driverRepository.findByCpf(cpf);
+  }
 
 }

@@ -12,7 +12,7 @@ export class RaceController {
     try {
       const { userId, currentLocation, destination, dateTime } = req.body;
 
-      const receipt = this.raceAppService.acceptRace({ userId, currentLocation, destination, dateTime });
+      const receipt = await this.raceAppService.acceptRace({ userId, currentLocation, destination, dateTime });
       res.json({ message: 'Corrida aceita com sucesso. Recibo gerado.', receipt });
     } catch (error) {
       res.status(400).json({ error: (error as Error).message });
