@@ -11,10 +11,14 @@ export class PostgresDriverRepository implements IDriverRepository {
   async create(driver: Driver): Promise<Driver> {
     const client = await pool.connect();
     try {
-      const { nome, cpf, datanascimento, sexo, endereco, cnh } = driver;
+      const { nome, cpf, datanascimento, sexo, endereco, cnh, disponivel } = driver;
+
+      const query = `
+        INSERT INTO drivers (nome, cpf, datanascimento, sexo, endereco, cnh, disponivel, created_at, updated_at) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) 
+        RETURNING *`;
       
-      const query = 'INSERT INTO drivers (nome, cpf, datanascimento, sexo, endereco, cnh) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
-      const values = [nome, cpf, datanascimento, sexo, endereco, cnh];
+      const values = [nome, cpf, datanascimento, sexo, endereco, cnh, disponivel];
       const result = await client.query(query, values);
       return result.rows[0];
     } finally {
@@ -58,10 +62,11 @@ export class PostgresDriverRepository implements IDriverRepository {
   async update(id: number, driver: Driver): Promise<Driver | null> {
     const client = await pool.connect();
     try {
-      const { nome, cpf, datanascimento, sexo, endereco, cnh } = driver;
+      const { nome, cpf, datanascimento, sexo, endereco, cnh, disponivel } = driver;
 
-      const query = 'UPDATE drivers SET nome = $1, cpf = $2, datanascimento = $3, sexo = $4, endereco = $5, cnh = $6, updated_at = CURRENT_TIMESTAMP WHERE id = $7 RETURNING *';
-      const values = [nome, cpf, datanascimento, sexo, endereco, cnh, id];
+      const query = 'UPDATE drivers SET nome = $1, cpf = $2, datanascimento = $3, sexo = $4, endereco = $5, cnh = $6, disponivel = $7, updated_at = CURRENT_TIMESTAMP WHERE id = $8 RETURNING *';
+
+      const values = [nome, cpf, datanascimento, sexo, endereco, cnh, disponivel, id];
       const result = await client.query(query, values);
       return result.rows[0] || null;
     } finally {
@@ -83,7 +88,6 @@ export class PostgresDriverRepository implements IDriverRepository {
   async findAvailableDriver(location: GeoLocation, dateTime: DateTime): Promise<number | null> {
     const client = await pool.connect();
     try {
-      // Lógica para buscar um motorista disponível com base na localização e horário
       // Exemplo simplificado: buscar o primeiro motorista disponível
       const query = `
         SELECT id

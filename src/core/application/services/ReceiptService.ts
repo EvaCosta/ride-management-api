@@ -12,7 +12,6 @@ export class ReceiptService {
 
   public async generateAndSaveReceipt(receipt: Receipt): Promise<void> {
     const receiptDate = receipt.date.split('T')[0];
-    //const receiptDate = '2020-09-09';
     const receiptPath = path.join(this.tmpDirectory, receipt.userId, receiptDate);
     fs.mkdirSync(receiptPath, { recursive: true });
 
