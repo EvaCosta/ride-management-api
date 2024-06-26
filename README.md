@@ -86,3 +86,8 @@ A Ride Management API é um sistema para gerenciar corridas entre passageiros e 
    ```
    npm run dev
    ```
+
+3. **Teste:**
+   ```
+   npm run test
+   ```
